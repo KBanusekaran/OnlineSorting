@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:sws="http://www.springframework.org/schema/web-services"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+	
+
+	<context:component-scan base-package="com.online.sorting" />
+	<mvc:default-servlet-handler/>
+	<mvc:annotation-driven/>
+       <!--  <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+     -->
+    <bean id="viewResolver"
+    	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+              <property name="prefix">
+                  <value>/</value>
+               </property>
+              <property name="suffix">
+                 <value>.jsp</value>
+              </property>
+        </bean>
+    
+     <bean id="dataSourceMySQL" class="org.springframework.jndi.JndiObjectFactoryBean">
+        			<property name="jndiName" value="com.sorting.datasource"></property>
+	        </bean>
+	        
+	        <bean id="sessionFactorySorting" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >             
+	            <property name="dataSource" ref="dataSourceMySQL" />
+	            <property name="annotatedClasses">
+	                <list>
+	                    <value>com.online.sorting.entity.SortingResults</value>
+	                </list>
+	            </property>
+	            <property name="hibernateProperties">
+	                <props>
+	                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+	                    <prop key="hibernate.show_sql">false</prop>
+	                </props>
+	            </property>
+	        </bean>
+	        
+	        <tx:annotation-driven transaction-manager="transactionManagerSorting"/>
+
+	         <bean id="transactionManagerSorting" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	            <property name="sessionFactory" ref="sessionFactorySorting" />
+	        </bean>
+	        
+	         <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	
+</beans>
