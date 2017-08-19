@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 	    {  
 	        @NamedQuery(  
 	        name = "getUnsortedList",  
-	        query = "from SortingResults s where s.guid = :guid"  
+	        query = "from SortingResults s where s.guid = :guid ORDER BY s.sortId DESC"  
 	        )  
 	    }  
 	) 
