@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import com.online.sorting.dao.SortingDao;
 import com.online.sorting.entity.SortingResults;
-import com.online.sorting.pojo.Sorting;
+import com.online.sorting.pojo.JsonSorting;
 import com.online.sorting.util.SortingException;
 
 @Repository
@@ -16,7 +16,7 @@ public class SortingDAOImpl implements SortingDao{
 
 
 	
-	public void saveUnsortedList(Session session,Sorting sorting) throws SortingException {
+	public void saveUnsortedList(Session session,JsonSorting sorting) throws SortingException {
 		SortingResults sortingResults=new SortingResults();
 		sortingResults.setGuid(sorting.getGuid());
 		sortingResults.setUnSortedList(sorting.getUnSortedList());

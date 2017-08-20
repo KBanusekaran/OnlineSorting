@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import com.online.sorting.pojo.JsonSortings;
 import com.online.sorting.pojo.JsonSorting;
-import com.online.sorting.pojo.Sorting;
 import com.online.sorting.service.SortingService;
 import com.online.sorting.util.SortingException;
 
@@ -30,9 +30,9 @@ public class SortingController {
 
 	@RequestMapping(value = "/sorting", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<Object> getPreviousSortedVales(@RequestBody Sorting sorting) {
-		List<Sorting> sortList = new ArrayList<>();
-		JsonSorting jsonSort = new JsonSorting();
+	public ResponseEntity<Object> saveAndSortUnSortedList(@RequestBody JsonSorting sorting) {
+		List<JsonSorting> sortList = new ArrayList<>();
+		JsonSortings jsonSort = new JsonSortings();
 		try {
 			if (sorting.getGuid() == null || sorting.getGuid().isEmpty()) {
 				jsonSort.setGuid(UUID.randomUUID().toString());
@@ -41,7 +41,7 @@ public class SortingController {
 				jsonSort.setGuid(sorting.getGuid());
 			}
 			sortingService.saveUnsortedList(sorting);
-			sortList = sortingService.getPreviousSortedVales(sorting.getGuid());
+			sortList = sortingService.getAllSortedVales(sorting.getGuid());
 			jsonSort.setSorting(sortList);
 		} catch (SortingException e) {
 			return new ResponseEntity<Object>(jsonSort, HttpStatus.EXPECTATION_FAILED);
@@ -51,10 +51,10 @@ public class SortingController {
 
 	@RequestMapping(value = "/sorting/{guid}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<Object> getPreviousSortedVales(@PathVariable String guid) {
-		JsonSorting jsonSort = new JsonSorting();
+	public ResponseEntity<Object> getAllSortedList(@PathVariable String guid) {
+		JsonSortings jsonSort = new JsonSortings();
 		try {
-			jsonSort.setSorting(sortingService.getPreviousSortedVales(guid));
+			jsonSort.setSorting(sortingService.getAllSortedVales(guid));
 		} catch (SortingException e) {
 			return new ResponseEntity<Object>(jsonSort, HttpStatus.EXPECTATION_FAILED);
 		}

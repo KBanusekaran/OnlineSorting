@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.online.sorting.dao.JpaSessionFactory;
 import com.online.sorting.dao.SortingDao;
-import com.online.sorting.pojo.Sorting;
+import com.online.sorting.pojo.JsonSorting;
 import com.online.sorting.util.SortingException;
 import com.online.sorting.util.SortingUtil;
 
@@ -29,25 +29,21 @@ public class SortingServiceImpl implements SortingService {
 
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<Sorting> getPreviousSortedVales(String guidValue) throws SortingException {
-		List<Sorting> sorting = new ArrayList<>();
+	public List<JsonSorting> getAllSortedVales(String guidValue) throws SortingException {
+		List<JsonSorting> sorting = new ArrayList<>();
 		Session session = jpaSessionFactory.getSortingSessionFactory().getCurrentSession();
 		sortingDao.getAllUnsortedList(session,guidValue).forEach(unSortedString->{
-			Sorting result = new Sorting();
+			JsonSorting result = new JsonSorting();
 			result.setGuid(guidValue);
-			result.setUnSortedList(unSortedString);
-			long[] unSortedArray=Arrays.stream(unSortedString.split(",")).map(String::trim).mapToLong(Long::parseLong).toArray();		
-			long startTime=System.currentTimeMillis();
-			result.setSortedList(SortingUtil.bubbleSort(unSortedArray,result));
-			long endTime=System.currentTimeMillis();
-			result.setExecutionTime(String.valueOf(endTime-startTime));
+			result.setUnSortedList(unSortedString);					
+			SortingUtil.bubbleSort(result);
 			sorting.add(result);
 		});
 		return sorting;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { SortingException.class })
-	public void saveUnsortedList(Sorting sorting) throws SortingException {
+	public void saveUnsortedList(JsonSorting sorting) throws SortingException {
 		Session session = jpaSessionFactory.getSortingSessionFactory().getCurrentSession();
 		sortingDao.saveUnsortedList(session, sorting);
 	}

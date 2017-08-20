@@ -1,11 +1,12 @@
 package com.online.sorting.pojo;
 
-import java.util.List;
-
 public class JsonSorting {
 	private String guid;
-	private List<Sorting> sorting;
-
+	private String unSortedList;
+	private String SortedList;
+	private String executionTime;
+	private Integer noOfSteps=0;
+	
 	public String getGuid() {
 		return guid;
 	}
@@ -14,12 +15,35 @@ public class JsonSorting {
 		this.guid = guid;
 	}
 
-	public List<Sorting> getSorting() {
-		return sorting;
+	public String getUnSortedList() {
+		return unSortedList;
 	}
 
-	public void setSorting(List<Sorting> sorting) {
-		this.sorting = sorting;
+	public void setUnSortedList(String unSortedList) {
+		this.unSortedList = unSortedList;
 	}
 
+	public String getSortedList() {
+		return SortedList;
+	}
+
+	public void setSortedList(String sortedList) {
+		SortedList = sortedList;
+	}
+
+	public String getExecutionTime() {
+		return executionTime;
+	}
+
+	public void setExecutionTime(String executionTime) {
+		this.executionTime = executionTime;
+	}
+
+	public Integer getNoOfSteps() {
+		return noOfSteps;
+	}
+
+	public void exchange() {
+		this.noOfSteps++;
+	}
 }
